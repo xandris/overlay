@@ -5,7 +5,8 @@ EAPI=7
 
 DESCRIPTION="Eebydeeby janky automated Gentoo custodian"
 HOMEPAGE="https://github.com/xandris/eebydeeby"
-SRC_URI=""
+SRC_URI="https://github.com/xandris/${PN}/archive/refs/tags/${PV}.tar.gz"
+RESTRICT="mirror"
 
 LICENSE="CC0 1.0"
 SLOT="0"
