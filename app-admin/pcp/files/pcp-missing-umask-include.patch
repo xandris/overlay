@@ -1,0 +1,12 @@
+diff --git a/src/pmview/main.cpp b/src/pmview/main.cpp
+index 2fe6a2b..8a861db 100644
+--- a/src/pmview/main.cpp
++++ b/src/pmview/main.cpp
+@@ -11,6 +11,7 @@
+  * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+  * for more details.
+  */
++#include <sys/stat.h>
+ #include <QSettings>
+ #include <QTextStream>
+ #include <QMessageBox>

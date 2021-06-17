@@ -1,0 +1,15 @@
+BDEPEND=doc? ( app-text/xmlto dev-libs/libxslt media-gfx/inkscape ) go? ( dev-lang/go ) sys-devel/gettext virtual/pkgconfig || ( dev-lang/python:3.10 dev-lang/python:3.9 dev-lang/python:3.8 ) sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+DEFINED_PHASES=configure install setup
+DEPEND=acct-user/cockpit acct-group/cockpit pcp? ( app-admin/pcp ) polkit? ( sys-auth/polkit ) ssh? ( >=net-libs/libssh-0.8.5[server] ) app-arch/lz4 app-arch/zstd >=app-crypt/mit-krb5-1.11 app-crypt/p11-kit dev-libs/glib dev-libs/gmp dev-libs/json-glib dev-libs/libffi dev-libs/libgcrypt dev-libs/libgpg-error dev-libs/libpcre dev-libs/libtasn1 dev-libs/libunistring dev-libs/nettle dev-libs/openssl net-dns/libidn2 net-libs/gnutls sys-apps/keyutils sys-apps/systemd sys-libs/e2fsprogs-libs sys-libs/libcap sys-libs/pam sys-libs/zlib
+DESCRIPTION=Cockpit is a web-based graphical interface for servers.
+EAPI=7
+HOMEPAGE=https://cockpit-project.org/
+IUSE=asan debug doc go pam pcp polkit ssh
+KEYWORDS=~amd64 ~x86
+LICENSE=LGPL-2.1
+RDEPEND=acct-user/cockpit acct-group/cockpit pcp? ( app-admin/pcp ) polkit? ( sys-auth/polkit ) ssh? ( >=net-libs/libssh-0.8.5[server] ) app-arch/lz4 app-arch/zstd >=app-crypt/mit-krb5-1.11 app-crypt/p11-kit dev-libs/glib dev-libs/gmp dev-libs/json-glib dev-libs/libffi dev-libs/libgcrypt dev-libs/libgpg-error dev-libs/libpcre dev-libs/libtasn1 dev-libs/libunistring dev-libs/nettle dev-libs/openssl net-dns/libidn2 net-libs/gnutls sys-apps/keyutils sys-apps/systemd sys-libs/e2fsprogs-libs sys-libs/libcap sys-libs/pam sys-libs/zlib pam? ( sys-libs/pam ) sys-apps/kexec-tools sys-fs/udisks || ( ( dev-lang/python:3.10 dev-python/dbus-python[python_targets_python3_10(-),-python_single_target_python3_10(-)] ) ( dev-lang/python:3.9 dev-python/dbus-python[python_targets_python3_9(-),-python_single_target_python3_9(-)] ) ( dev-lang/python:3.8 dev-python/dbus-python[python_targets_python3_8(-),-python_single_target_python3_8(-)] ) )
+RESTRICT=mirror
+SLOT=0
+SRC_URI=https://github.com/cockpit-project/cockpit/releases/download/246/cockpit-246.tar.xz
+_eclasses_=autotools	9e63f92c2a5d867fea55ecb160c7d354	gnuconfig	9f91b4b0c84e734a87492d4293f03de5	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	ebdbaed22e873a5abe6205f41349b479	python-any-r1	17241a11501065ff3651350040875aa9	python-utils-r1	6e84b7d3d8d0bb1ee12774f4a66909e2	toolchain-funcs	24921b57d6561d87cbef4916a296ada4
+_md5_=5eb07245ac3cbb98689d0b9c872f4c4d

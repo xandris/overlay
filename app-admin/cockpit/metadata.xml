@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="asan">Enable AddressSanitizer (-fsanitize=address)</flag>
+		<flag name="go">Enable <pkg>dev-lang/go</pkg> support?</flag>
+		<flag name="pcp">Enable metrics/graphs from Perfomance Co-Pilot (<pkg>app-admin/pcp</pkg>)</flag>
+		<flag name="polkit">Enable bridge with <pkg>sys-auth/polkit</pkg></flag>
+		<flag name="ssh">Build cockpit-ssh for remote access, requires <pkg>net-libs/libssh</pkg></flag>
+	</use>
+</pkgmetadata>

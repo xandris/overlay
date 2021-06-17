@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="discovery">Enable service discovery with Avahi</flag>
+		<flag name="libpfm">Enable dev-libs/libpfm PMDA</flag>
+		<flag name="qt">Enable Qt GUI</flag>
+		<flag name="qt3d">Enable 3D Scene-graph API</flag>
+		<flag name="rpm">Monitor app-arch/rpm</flag>
+		<flag name="statsd">Enable statsd PMDA</flag>
+		<flag name="systemtap">Build support for profiling and tracing using dev-util/systemtap</flag>
+		<flag name="podman">Enable support for monitoring containers with Podman (requires dev-libs/libvarlink)</flag>
+		<flag name="X">Enable X11 support?</flag>
+	</use>
+</pkgmetadata>

@@ -1,0 +1,12 @@
+#%PAM-1.0
+# this MUST be first in the "auth" stack as it sets PAM_USER
+# user_unknown is definitive, so die instead of ignore to avoid subsequent modules mess up the error code
+-auth      [success=done new_authtok_reqd=done user_unknown=die default=ignore]   pam_cockpit_cert.so
+auth       include      system-remote-login
+account    include      system-remote-login
+password   include      system-remote-login
+# pam_selinux.so close should be the first session rule
+session    include     system-remote-login
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    optional     pam_keyinit.so force revoke
+session    include      system-remote-login
