@@ -59,7 +59,7 @@ DEPEND="
 	dev-libs/nspr
 	dev-libs/openssl
 	sys-libs/libcap
-	sys-libs/ncurses[unicode]
+	sys-libs/ncurses
 	sys-libs/readline
 "
 
