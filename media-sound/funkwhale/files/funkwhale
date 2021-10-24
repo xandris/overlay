@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+PATH="/srv/funkwhale/virtualenv/bin:$PATH"
+
+exec /srv/funkwhale/api/manage.py "$@"
