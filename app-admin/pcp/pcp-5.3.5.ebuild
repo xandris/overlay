@@ -75,7 +75,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-missing-umask-include.patch"
+	"${FILESDIR}/${PN}-fix-without-static-probes.patch"
 )
 
 src_configure() {

@@ -1,0 +1,68 @@
+diff --git a/configure b/configure
+index 884a829b..22d676af 100755
+--- a/configure
++++ b/configure
+@@ -5451,7 +5451,9 @@ done
+ 	fi
+ 	enable_probes=false
+     fi
+-    ac_ext=c
++fi
++
++ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+@@ -5772,15 +5774,14 @@ fi
+ done
+ 
+ 
+-    if test "$enable_probes" = "true"
+-    then
++if test "$enable_probes" = "true"
++then
+ 
+ $as_echo "#define HAVE_STATIC_PROBES 1" >>confdefs.h
+ 
+-    fi
++fi
+ 
+ 
+-fi
+ 
+ if test "x$use_gperftools" != "xno"; then :
+ 
+diff --git a/configure.ac b/configure.ac
+index 477493cf..e15201c8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -712,7 +712,9 @@ then
+ 	fi
+ 	enable_probes=false
+     fi
+-    AC_CHECK_HEADERS([sys/sdt.h], [
++fi
++
++AC_CHECK_HEADERS([sys/sdt.h], [
+ 	if $enable_probes = true
+ 	then
+ 	    if test $target_os = kfreebsd
+@@ -754,13 +756,12 @@ End-of-File
+ 	fi
+     ])
+ 
+-    if test "$enable_probes" = "true"
+-    then
+-        AC_DEFINE(HAVE_STATIC_PROBES, [1], [Static probes (dtrace, systemtap)])
+-    fi
+-    AC_SUBST(enable_probes)
+-    AC_SUBST(DTRACE)
++if test "$enable_probes" = "true"
++then
++    AC_DEFINE(HAVE_STATIC_PROBES, [1], [Static probes (dtrace, systemtap)])
+ fi
++AC_SUBST(enable_probes)
++AC_SUBST(DTRACE)
+ 
+ dnl Check for gperftools
+ AS_IF([test "x$use_gperftools" != "xno"], [
