@@ -1,4 +1,4 @@
-# Copyright 2021 Gentoo Authors
+# Copyright 2021-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ inherit autotools python-any-r1
 
 DESCRIPTION="Cockpit is a web-based graphical interface for servers."
 HOMEPAGE="https://cockpit-project.org/"
-SRC_URI="https://github.com/${PN}-project/${PN}/archive/refs/tags/${PV}.tar.gz"
+SRC_URI="https://github.com/${PN}-project/${PN}/releases/download/${PV}/${P}.tar.xz"
 RESTRICT="mirror"
 
 LICENSE="LGPL-2.1"
@@ -40,7 +40,7 @@ DEPEND="
 	net-libs/gnutls
 	sys-apps/keyutils
 	sys-apps/systemd
-	sys-libs/e2fsprogs-libs
+	sys-fs/e2fsprogs
 	sys-libs/libcap
 	sys-libs/pam
 	sys-libs/zlib
@@ -59,23 +59,16 @@ BDEPEND="
 		dev-libs/libxslt
 		media-gfx/inkscape
 	)
-	net-libs/nodejs
 	go? ( dev-lang/go )
 	sys-devel/gettext
 	virtual/pkgconfig
 	${PYTHON_DEPS}
 "
-
 # One day maybe we can build from the source tarball...
 # The makefile wants to know the SHA-1 of the node_modules directory
 # so it can cache dependencies in ~/.cache/cockpit-dev.
 # But I don't have that directory so shrug?
-
-src_prepare() {
-	eapply_user
-	echo "${PV}" > .tarball
-	eautoreconf
-}
+#net-libs/nodejs
 
 src_configure() {
 	local myconf="
@@ -92,12 +85,6 @@ src_configure() {
 		--with-admin-group=wheel
 	"
 	econf $myconf
-
-# Cockpit code imports these but they're not listed in package.json
-# so npm might decide not to flatten them and the Node resolution
-# algorithm won't find them.
-	npm install @patternfly/react-icons react-dropzone@9.x
-	touch package-lock.json
 }
 
 src_install() {
