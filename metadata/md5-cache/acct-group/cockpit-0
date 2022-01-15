@@ -1,7 +1,8 @@
 DEFINED_PHASES=install preinst pretend
 DESCRIPTION=System group: cockpit
 EAPI=7
+INHERIT=acct-group
 KEYWORDS=~*
 SLOT=0
-_eclasses_=acct-group	207adc497ea35d11dcf8959e7546a459	user	26d8ce6329c43cbac965617f1c0627e2	user-info	a2abd4e2f4c3b9b06d64bf1329359a02
+_eclasses_=user-info	2e75eaea3582b052ec16d9d5aa74ced3	user	1033b6bed7cf367c4507ea9a3ff503d0	acct-group	d12e466819e60dedccac935746c2b151
 _md5_=396b6424f18ee2a2e1da180d75a14d50
