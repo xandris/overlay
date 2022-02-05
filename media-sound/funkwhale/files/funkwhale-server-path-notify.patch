@@ -1,0 +1,17 @@
+diff -ur funkwhale-1.2.1.orig/deploy/funkwhale-server.service funkwhale-1.2.1/deploy/funkwhale-server.service
+--- funkwhale-1.2.1.orig/deploy/funkwhale-server.service	2022-01-28 16:39:20.971946198 -0800
++++ funkwhale-1.2.1/deploy/funkwhale-server.service	2022-01-28 16:42:07.015943294 -0800
+@@ -4,10 +4,12 @@
+ PartOf=funkwhale.target
+ 
+ [Service]
++Type=notify
+ User=funkwhale
+ # adapt this depending on the path of your funkwhale installation
+ WorkingDirectory=/srv/funkwhale/api
+ EnvironmentFile=/srv/funkwhale/config/.env
+-ExecStart=/srv/funkwhale/virtualenv/bin/gunicorn config.asgi:application -w ${FUNKWHALE_WEB_WORKERS} -k uvicorn.workers.UvicornWorker -b ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}
++Environment=PATH=$PATH:/srv/funkwhale/virtualenv/bin
++ExecStart=gunicorn config.asgi:application -w ${FUNKWHALE_WEB_WORKERS} -k uvicorn.workers.UvicornWorker -b ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}
+ [Install]
+ WantedBy=multi-user.target

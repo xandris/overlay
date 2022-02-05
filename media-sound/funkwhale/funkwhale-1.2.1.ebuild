@@ -6,11 +6,11 @@ EAPI=8
 DESCRIPTION="Federated audio server."
 HOMEPAGE="https://funkwhale.audio/"
 SRC_URI="https://dev.funkwhale.audio/${PN}/${PN}/-/archive/${PV}/${P}.tar.bz2"
-RESTRICT="mirror"
+RESTRICT="mirror network-sandbox"
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 ~arm"
 
 DEPEND="
 	acct-user/funkwhale
@@ -20,17 +20,24 @@ DEPEND="
 	sys-libs/zlib
 	virtual/jpeg
 
-	>=dev-python/setuptools-49
-	=dev-python/python-ldap-3.3*[sasl]
-	=dev-python/pytz-2021.1
-	=dev-python/redis-py-3.5*
-	=dev-python/python-musicbrainzngs-0.7*
-	=media-libs/mutagen-1.45*
-	=dev-python/python-magic-0.4*
-	=dev-python/aiohttp-3.7*
 	=dev-python/click-7.1*
+	=dev-python/django-3.2*
+	=dev-python/django-auth-ldap-3.0*
+	=dev-python/django-cacheops-6.0*
+	=dev-python/django-redis-5.0*
+	=dev-python/djangorestframework-3.12*
 	=dev-python/feedparser-6.0*
-	=dev-python/watchdog-1*
+	=dev-python/markdown-3.3*
+	=dev-python/python-magic-0.4*
+	=dev-python/python-musicbrainzngs-0.7*
+	=dev-python/pyopenssl-20.0*
+	=dev-python/service_identity-21.1*
+	>=dev-python/setuptools-57
+	=dev-python/watchdog-2.1*
+
+	=media-libs/mutagen-1.45*
+
+	=www-servers/gunicorn-20.1*
 "
 
 RDEPEND="
@@ -44,26 +51,33 @@ BDEPEND="
 "
 
 PYTHON_COMPAT=( python3_9 )
+DISTUTILS_SINGLE_IMPL=1
 
-inherit python-single-r1 systemd
+inherit distutils-r1 systemd
+
+src_prepare() {
+	eapply "${FILESDIR}/${PN}-server-path-notify.patch"
+
+	default
+}
 
 src_configure() {
 	(
 		python -m venv --system-site-packages virtualenv
-		virtualenv/bin/python -m pip install --upgrade pip
-		virtualenv/bin/python -m pip install -r api/requirements.txt
+		distutils-r1_run_phase virtualenv/bin/python -m pip install --upgrade pip || die "Failed to install python packages"
+		distutils-r1_run_phase virtualenv/bin/python -m pip install -r api/requirements.txt || die "Failed to install python packages"
 	)
 
-	pushd front
-	yarn
-	popd
+	pushd front || die
+	tc-env_build yarn || die "Failed to install yarn packages"
+	popd || die
 }
 
 src_compile() {
-	pushd front
-	yarn run i18n-compile
-	yarn run build | tee /dev/stderr | (! grep -i 'ERROR in' )
-	popd
+	pushd front || die
+	tc-env_build yarn run build | tee /dev/stderr | (! grep -i 'ERROR in' ) || \
+		die "Failed to build frontend"
+	popd || die
 }
 
 src_install() {
