@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>alex.iris.parker@gmail.com</email>
+		<name>Alexandra Parker</name>
+	</maintainer>
+	<use>
+		<flag name="system-python">Use system Python packages where possible.</flag>
+	</use>
+</pkgmetadata>
