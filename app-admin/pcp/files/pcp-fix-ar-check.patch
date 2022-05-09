@@ -1,0 +1,15 @@
+--- pcp-5.3.7.orig/configure.ac	2022-05-08 15:20:06.708856550 -0700
++++ pcp-5.3.7/configure.ac	2022-05-08 15:21:06.840980775 -0700
+@@ -625,9 +625,9 @@
+ 
+ if test -z "$AR"; then
+     AC_PATH_PROGS(AR, [gcc-ar ar], /usr/bin/ar)
+-fi
+-if test ! -x "$AR"; then
+-    AC_MSG_ERROR([cannot find a valid 'ar' command.])
++    if test ! -x "$AR"; then
++        AC_MSG_ERROR([cannot find a valid 'ar' command.])
++    fi
+ fi
+ ar=$AR
+ AC_SUBST(ar)
