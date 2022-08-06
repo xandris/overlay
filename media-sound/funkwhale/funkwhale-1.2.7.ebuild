@@ -72,13 +72,15 @@ BDEPEND="
 	virtual/rust
 "
 
-PYTHON_COMPAT=( python3_9 )
+PYTHON_COMPAT=( python3_9 python3_10 pypy3 )
 DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_USE_SETUPTOOLS=no
 
 inherit distutils-r1 systemd multiprocessing
 
 src_prepare() {
 	eapply "${FILESDIR}/${PN}-server-path-notify.patch"
+	eapply "${FILESDIR}/${PN}-nodejs-18.patch"
 
 	if ! use ldap; then
 		eapply "${FILESDIR}/${PN}-disable-ldap.patch"
@@ -87,19 +89,38 @@ src_prepare() {
 	default
 }
 
+get-pypy-libdir() {
+	local i
+	for i in "${ESYSROOT}/usr/$(get_abi_LIBDIR)/pypy3."*; do
+		if [[ -d "$i" ]]; then
+			echo "$i"
+			return
+		fi
+	done
+	return 1
+}
+
 
 src_configure() {
 	local pip
+	local pip_args=( -v --no-compile --no-binary ':all:' )
+	einfo "EPYTHON: ${EPYTHON}"
+	einfo "PYTHON: ${PYTHON}"
 
 	if tc-is-cross-compiler; then
+		einfo "Setting up cross virtualenv"
 		"${EPYTHON}" -m venv build-venv || die "Failed to setup build-venv"
+
+		einfo "Upgrading pip in virtualenv"
 		build-venv/bin/python -m pip install -v --upgrade pip || die "Failed to upgrade pip"
 		build-venv/bin/python -m pip install -v crossenv || die "Failed to install crossenv"
 		build-venv/bin/python -m crossenv --sysroot "${ESYSROOT}" -vvv "${ESYSROOT}/${PYTHON}" cross-venv || "Failed to setup cross-virtualenv"
 
-		cross-venv/bin/build-pip install -v --upgrade pip || die "Failed to upgrade build pip"
-		cross-venv/bin/cross-pip install -v --upgrade pip || die "Failed to upgrade host pip"
-		cross-venv/bin/build-pip install -v cffi || die "Failed to install build cffi"
+		cross-venv/bin/build-pip install "${pip_args[@]}" --upgrade pip || die "Failed to upgrade build pip"
+		cross-venv/bin/cross-pip install "${pip_args[@]}" --upgrade pip || die "Failed to upgrade host pip"
+
+		einfo "Installing cffi in virtualenv"
+		cross-venv/bin/build-pip install "${pip_args[@]}" cffi || die "Failed to install build cffi"
 
 		pip=cross-venv/bin/cross-pip
 
@@ -107,44 +128,102 @@ src_configure() {
 		local -x LIBUV_CONFIGURE_HOST="${CHOST}"
 
         # https://github.com/psycopg/psycopg2/issues/997
-        local -x CFLAGS="-I${ESYSROOT}/usr/include"
-        local -x LDFLAGS="-L${ESYSROOT}/usr/$(get_abi_LIBDIR) -L${ESYSROOT}/$(get_abi_LIBDIR)"
+        local -x CFLAGS="${CFLAGS} -I${ESYSROOT}/usr/include"
+        local -x LDFLAGS="${LDFLAGS} -L${ESYSROOT}/usr/$(get_abi_LIBDIR) -L${ESYSROOT}/$(get_abi_LIBDIR)"
 
 		# lxml needs this
         local -x PKG_CONFIG='/usr/bin/cross-pkg-config'
 
-		"$pip" install -v $(grep '^Pillow' api/requirements/base.txt) \
-			--global-option=build_ext \
-			--global-option=--disable-{platform-guessing,tiff,freetype,raqm,lcms,webp{,mux},jpeg2000,imagequant,xcb} \
-			--global-option=-j$(makeopts_jobs) \
-			--install-option=--no-compile \
-			|| die "Failed to install Pillow"
+		einfo "Installing 'wheel' into virtualenv"
+		"$pip" install "${pip_args[@]}" wheel || die "Failed to install python package 'wheel'"
 
-		"$pip" install -v --install-option=--no-compile -r api/requirements.txt \
-			|| die "Failed to install python packages"
+		case "${EPYTHON}" in
+		pypy*)
+		    # crossenv doesn't seem to get these into sysconfig
+		    # distutils will look in the environment first, though.
+			tc-export CC CXX AS LD RANLIB AR NM READELF STRIP OBJCOPY OBJDUMP
+			
+			local -x LDSHARED="${CC} -shared ${LDFLAGS}"
+
+			# pypy doesn't seem to ship with this?
+
+			# Variables for pyo3?
+			local -x PYO3_CROSS=1
+			local -x PYO3_CROSS_LIB_DIR
+			PYO3_CROSS_LIB_DIR="$(get-pypy-libdir)" || die "Could not find pypy libdir"
+			local -x PYO3_PYTHON="${ESYSROOT}/${PYTHON#/}"
+			local -x PYO3_NO_PYTHON=1
+			local -x PYO3_CONFIG_FILE="${HOME}/pyo3-config.txt"
+			einfo "PYO3_CROSS=${PYO3_CROSS}"
+			einfo "PYO3_CROSS_LIB_DIR=${PYO3_CROSS_LIB_DIR}"
+			einfo "PYO3_PYTHON=${PYO3_PYTHON}"
+			einfo "PYO3_CROSS_PYTHON_VERSION=3.9"
+			einfo "PYO3_NO_PYTHON=${PYO3_NO_PYTHON}"
+			einfo "PYO3_CONFIG_FILE=${PYO3_CONFIG_FILE}"
+
+			# Cargo can't tell the target arch
+			mkdir -p "${HOME}/.cargo" || die "Could not create cargo config dir"
+			cat >>"${HOME}/.cargo/config.toml" <<-EOF
+			[build]
+			jobs = $(makeopts_jobs)
+			target = "${CHOST}"
+			EOF
+
+			cat >>"${HOME}/pyo3-config.txt" <<-EOF
+			implementation=PyPy
+			version=3.9
+			shared=true
+			abi3=true
+			EOF
+			;;
+		esac
 	else
+		einfo "Setting up virtualenv"
 		"${EPYTHON}" -m venv virtualenv
 
-		pip=cross-venv/bin/cross-pip
+		pip=virtualenv/bin/pip
 
-		"$pip" install -v --upgrade pip || die "Failed to install python packages"
+		einfo "Upgrading pip in virtualenv"
+		"$pip" install "${pip_args[@]}" --upgrade pip || die "Failed to upgrade pip"
 
-		"$pip" install -v $(grep '^Pillow' api/requirements/base.txt) \
-			--global-option=build_ext \
-			--global-option=--disable-{platform-guessing,tiff,freetype,raqm,lcms,webp{,mux},jpeg2000,imagequant,xcb} \
-			--global-option=-j$(makeopts_jobs) \
-			--install-option=--no-compile \
-			|| die "Failed to install Pillow"
-
-		"$pip" install -v -r api/requirements.txt || die "Failed to install python packages"
+		einfo "Installing 'wheel' into virtualenv"
+		"$pip" install "${pip_args[@]}" wheel || die "Failed to install python package 'wheel'"
 	fi
+
+	einfo "Installing Pillow in virtualenv"
+	"$pip" install "${pip_args[@]}" $(grep '^Pillow' api/requirements/base.txt) \
+		--global-option=build_ext \
+		--global-option=--disable-{tiff,freetype,raqm,lcms,webp{,mux},jpeg2000,imagequant,xcb} \
+		--global-option=-j$(makeopts_jobs) \
+		|| die "Failed to install Pillow"
+
+	"$pip" install "${pip_args[@]}" $(grep '^cryptography' api/requirements/base.txt) \
+		|| die "Failed to install python packages"
+
+	einfo "Installing ${PN} API requirements in virtualenv"
+	"$pip" install "${pip_args[@]}" -r api/requirements.txt \
+		|| die "Failed to install python packages"
+
+	local uninst=( )
+
+	case "${PYTHON}" in
+	pypy*)
+		uninst+=( wheel )
+		;;
+	esac
+
+	uninst+=( pip )
+
+	"$pip" uninstall -y "${uninst[@]}"
 
 	pushd front || die
 	tc-env_build yarn || die "Failed to install yarn packages"
+	find node_modules/fomantic-ui-css -name '*.css' -print0 | xargs -0 sed -i 's/;;/;/g'
 	popd || die
 }
 
 src_compile() {
+	local -x NODE_ENV=production
 	pushd front || die
 	tc-env_build yarn run build | tee /dev/stderr | (! grep -i 'ERROR in' ) || \
 		die "Failed to build frontend"
