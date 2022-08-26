@@ -76,7 +76,14 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-fix-without-static-probes.patch"
+	"${FILESDIR}/${PN}-fix-ar-check.patch"
 )
+
+src_prepare() {
+	default
+	eautoreconf
+	sed -Ei '/HAVE_64|PM_SIZEOF/ d' src/include/pcp/config.h.in
+}
 
 src_configure() {
 	local myconf="
