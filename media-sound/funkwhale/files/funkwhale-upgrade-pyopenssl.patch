@@ -1,0 +1,11 @@
+--- funkwhale-1.2.7.orig/api/requirements/base.txt	2022-10-11 00:36:09.054156346 +0000
++++ funkwhale-1.2.7/api/requirements/base.txt	2022-10-11 00:33:41.294657452 +0000
+@@ -44,7 +44,7 @@
+ requests-http-message-signatures==0.3.1
+ django-cleanup~=5.2.0
+ requests~=2.26.0
+-pyOpenSSL~=20.0.1
++pyOpenSSL~=22.0.0
+ 
+ pydub~=0.25.1
+ pyld~=2.0.3

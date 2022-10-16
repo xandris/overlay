@@ -1,5 +1,15 @@
---- orig/funkwhale-1.2.7/front/package.json	2022-07-14 10:53:53.000000000 +0000
-+++ funkwhale-1.2.7/front/package.json	2022-07-30 03:12:47.999069042 +0000
+diff -ur funkwhale-1.2.7.orig/front/package.json funkwhale-1.2.7/front/package.json
+--- funkwhale-1.2.7.orig/front/package.json	2022-07-14 10:53:53.000000000 +0000
++++ funkwhale-1.2.7/front/package.json	2022-10-10 22:32:46.262985726 +0000
+@@ -17,7 +17,7 @@
+   "dependencies": {
+     "axios": "0.21.4",
+     "axios-auth-refresh": "2.2.8",
+-    "core-js": "3.21.1",
++    "core-js": "3.x",
+     "diff": "4.0.2",
+     "django-channels": "1.1.6",
+     "focus-trap": "5.1.0",
 @@ -45,10 +45,10 @@
    },
    "devDependencies": {
@@ -15,32 +25,9 @@
      "@vue/test-utils": "~1.0.0-beta.20",
      "chai": "~4.1.2",
      "easygettext": "~2.6.3",
---- orig/funkwhale-1.2.7/front/vue.config.js	2022-07-14 10:53:53.000000000 +0000
-+++ funkwhale-1.2.7/front/vue.config.js	2022-07-30 01:06:34.993875508 +0000
-@@ -5,7 +5,7 @@
- const PreloadWebpackPlugin = require('preload-webpack-plugin');
- let plugins = [
-   // do not include moment.js locales since it's quite heavy
--  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-+  new webpack.IgnorePlugin({resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/}),
-   new PreloadWebpackPlugin({
-     rel: 'preload',
-     include: ['audio', 'core', 'about']
-@@ -60,10 +60,9 @@
-       ]
-     },
-     workboxOptions: {
--      importWorkboxFrom: 'local',
-       // swSrc is required in InjectManifest mode.
--      swSrc: 'src/service-worker.js',
--      swDest: 'service-worker.js',
-+      swSrc: './src/service-worker.js',
-+      swDest: './service-worker.js',
-       exclude: [
-         new RegExp('js/locale.*'),
-         new RegExp('js/moment-locale.*'),
---- orig/funkwhale-1.2.7/front/src/service-worker.js	2022-07-14 10:53:53.000000000 +0000
-+++ funkwhale-1.2.7/front/src/service-worker.js	2022-07-29 21:29:18.492678622 +0000
+diff -ur funkwhale-1.2.7.orig/front/src/service-worker.js funkwhale-1.2.7/front/src/service-worker.js
+--- funkwhale-1.2.7.orig/front/src/service-worker.js	2022-07-14 10:53:53.000000000 +0000
++++ funkwhale-1.2.7/front/src/service-worker.js	2022-10-10 22:32:46.262985726 +0000
 @@ -2,9 +2,11 @@
  
  // This is the code piece that GenerateSW mode can't provide for us.
@@ -106,3 +93,28 @@
 -workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
 +// suppressWarnings(); // Only used with Vue CLI 3 and Workbox v3.
 +precacheAndRoute(self.__WB_MANIFEST, {})
+diff -ur funkwhale-1.2.7.orig/front/vue.config.js funkwhale-1.2.7/front/vue.config.js
+--- funkwhale-1.2.7.orig/front/vue.config.js	2022-07-14 10:53:53.000000000 +0000
++++ funkwhale-1.2.7/front/vue.config.js	2022-10-10 22:32:46.262985726 +0000
+@@ -5,7 +5,7 @@
+ const PreloadWebpackPlugin = require('preload-webpack-plugin');
+ let plugins = [
+   // do not include moment.js locales since it's quite heavy
+-  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
++  new webpack.IgnorePlugin({resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/}),
+   new PreloadWebpackPlugin({
+     rel: 'preload',
+     include: ['audio', 'core', 'about']
+@@ -60,10 +60,9 @@
+       ]
+     },
+     workboxOptions: {
+-      importWorkboxFrom: 'local',
+       // swSrc is required in InjectManifest mode.
+-      swSrc: 'src/service-worker.js',
+-      swDest: 'service-worker.js',
++      swSrc: './src/service-worker.js',
++      swDest: './service-worker.js',
+       exclude: [
+         new RegExp('js/locale.*'),
+         new RegExp('js/moment-locale.*'),

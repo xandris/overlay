@@ -36,7 +36,7 @@ DEPEND="
 		=dev-python/markdown-3.3*
 		=dev-python/python-magic-0.4*
 		=dev-python/python-musicbrainzngs-0.7*
-		=dev-python/pyopenssl-20.0*
+		=dev-python/pyopenssl-22.0*
 		=dev-python/service_identity-21.1*
 		>=dev-python/setuptools-57
 		=dev-python/watchdog-2.1*
@@ -103,7 +103,7 @@ get-pypy-libdir() {
 
 src_configure() {
 	local pip
-	local pip_args=( -v --no-compile --no-binary ':all:' )
+	local pip_args=( -v --no-compile )
 	einfo "EPYTHON: ${EPYTHON}"
 	einfo "PYTHON: ${PYTHON}"
 
@@ -196,9 +196,6 @@ src_configure() {
 		--global-option=--disable-{tiff,freetype,raqm,lcms,webp{,mux},jpeg2000,imagequant,xcb} \
 		--global-option=-j$(makeopts_jobs) \
 		|| die "Failed to install Pillow"
-
-	"$pip" install "${pip_args[@]}" $(grep '^cryptography' api/requirements/base.txt) \
-		|| die "Failed to install python packages"
 
 	einfo "Installing ${PN} API requirements in virtualenv"
 	"$pip" install "${pip_args[@]}" -r api/requirements.txt \
