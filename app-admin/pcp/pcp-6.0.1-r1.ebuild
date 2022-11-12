@@ -75,8 +75,9 @@ BDEPEND="
 "
 
 PATCHES=(
-	#"${FILESDIR}/${PN}-fix-without-static-probes.patch"
 	"${FILESDIR}/${PN}-fix-ar-check.patch"
+	"${FILESDIR}/${PN}-missing-sys-types-h-check.patch"
+	"${FILESDIR}/${PN}-missing-sys-stat-include.patch"
 )
 
 src_prepare() {

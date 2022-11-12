@@ -1,0 +1,33 @@
+diff -ur pcp-6.0.1.orig/src/libpcp/src/tz.c pcp-6.0.1/src/libpcp/src/tz.c
+--- pcp-6.0.1.orig/src/libpcp/src/tz.c	2022-11-12 15:01:15.600041080 -0800
++++ pcp-6.0.1/src/libpcp/src/tz.c	2022-11-12 15:01:54.072065929 -0800
+@@ -25,6 +25,7 @@
+  * lock initialization in pmNewContext().
+  */
+ 
++#include <sys/stat.h>
+ #include "pmapi.h"
+ #include "libpcp.h"
+ #include "sha256.h"
+diff -ur pcp-6.0.1.orig/src/pmdas/podman/podman.c pcp-6.0.1/src/pmdas/podman/podman.c
+--- pcp-6.0.1.orig/src/pmdas/podman/podman.c	2022-11-12 15:01:15.620040366 -0800
++++ pcp-6.0.1/src/pmdas/podman/podman.c	2022-11-12 15:17:40.422957928 -0800
+@@ -12,6 +12,7 @@
+  * for more details.
+  */
+ #include <ctype.h>
++#include <sys/stat.h>
+ #include "podman.h"
+ #include <jsonsl/jsonsl.h>
+ #include "pmhttp.h"
+diff -ur pcp-6.0.1.orig/src/pmview/main.cpp pcp-6.0.1/src/pmview/main.cpp
+--- pcp-6.0.1.orig/src/pmview/main.cpp	2022-11-12 15:01:15.630040009 -0800
++++ pcp-6.0.1/src/pmview/main.cpp	2022-11-12 15:25:29.825363693 -0800
+@@ -11,6 +11,7 @@
+  * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+  * for more details.
+  */
++#include <sys/stat.h>
+ #include <QSettings>
+ #include <QTextStream>
+ #include <QMessageBox>
