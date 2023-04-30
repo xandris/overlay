@@ -215,7 +215,7 @@ src_configure() {
 	"$pip" uninstall -y "${uninst[@]}"
 
 	pushd front || die
-	tc-env_build yarn || die "Failed to install yarn packages"
+	tc-env_build yarn --ignore-engines || die "Failed to install yarn packages"
 	find node_modules/fomantic-ui-css -name '*.css' -print0 | xargs -0 sed -i 's/;;/;/g'
 	popd || die
 }

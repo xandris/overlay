@@ -32,3 +32,19 @@ diff -ur funkwhale-1.2.10.orig/api/requirements/base.txt funkwhale-1.2.10/api/re
 -asgiref==3.3.4 #1516
  importlib_metadata==4.13.0 # python 3.7 compatibility
  sentry-sdk==1.9.5
+diff -ur funkwhale-1.2.10.orig/api/funkwhale_api/radios/radios.py funkwhale-1.2.10/api/funkwhale_api/radios/radios.py
+--- funkwhale-1.2.10.orig/api/funkwhale_api/radios/radios.py	2023-04-29 19:42:27.922579374 +0000
++++ funkwhale-1.2.10/api/funkwhale_api/radios/radios.py	2023-04-29 19:43:40.311976542 +0000
+@@ -23,10 +23,10 @@
+         return
+ 
+     def pick(self, choices, previous_choices=[]):
+-        return random.sample(set(choices).difference(previous_choices), 1)[0]
++        return random.sample(tuple(set(choices).difference(previous_choices)), 1)[0]
+ 
+     def pick_many(self, choices, quantity):
+-        return random.sample(set(choices), quantity)
++        return random.sample(tuple(set(choices)), quantity)
+ 
+     def weighted_pick(self, choices, previous_choices=[]):
+         total = sum(weight for c, weight in choices)
