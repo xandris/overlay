@@ -1,0 +1,17 @@
+Some Subsonic players require the API to serve information about an album's
+artist.  This includes placeholder artists like "Various Artists". However,
+Funkwhale won't serve information about artists with no tracks, causing those
+players to show an error rather than the album's tracks. This hack allows
+Funkwhale to return info about such artists, fixing those clients.
+
+--- a/api/funkwhale_api/subsonic/views.py	2023-06-01 16:38:50.000000000 +0000
++++ b/api/funkwhale_api/subsonic/views.py	2023-06-02 23:04:34.587350790 +0000
+@@ -228,7 +228,7 @@
+         url_name="get_artist",
+         url_path="getArtist",
+     )
+-    @find_object(music_models.Artist.objects.all(), filter_playable=True)
++    @find_object(music_models.Artist.objects.all(), filter_playable=False)
+     def get_artist(self, request, *args, **kwargs):
+         artist = kwargs.pop("obj")
+         data = serializers.GetArtistSerializer(artist).data

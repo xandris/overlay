@@ -4,4 +4,4 @@ PATH="/srv/funkwhale/virtualenv/bin:$PATH"
 set -a
 source /etc/conf.d/funkwhale
 set +a
-exec /srv/funkwhale/virtualenv/bin/python /srv/funkwhale/api/manage.pyc "$@"
+exec /srv/funkwhale/venv/bin/funkwhale-manage "$@"
