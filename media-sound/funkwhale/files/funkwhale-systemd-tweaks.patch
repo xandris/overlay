@@ -1,0 +1,36 @@
+diff -ur funkwhale-1.3.0.orig/deploy/funkwhale-beat.service funkwhale-1.3.0/deploy/funkwhale-beat.service
+--- funkwhale-1.3.0.orig/deploy/funkwhale-beat.service	2023-06-04 18:42:51.898016806 +0000
++++ funkwhale-1.3.0/deploy/funkwhale-beat.service	2023-06-04 18:48:17.436862882 +0000
+@@ -7,7 +7,7 @@
+ User=funkwhale
+ # adapt this depending on the path of your funkwhale installation
+ WorkingDirectory=/srv/funkwhale/api
+-EnvironmentFile=/srv/funkwhale/config/.env
++EnvironmentFile=/etc/conf.d/funkwhale
+ 
+ ExecStart=/srv/funkwhale/venv/bin/celery \
+     --app funkwhale_api.taskapp \
+diff -ur funkwhale-1.3.0.orig/deploy/funkwhale-server.service funkwhale-1.3.0/deploy/funkwhale-server.service
+--- funkwhale-1.3.0.orig/deploy/funkwhale-server.service	2023-06-04 18:42:51.898016806 +0000
++++ funkwhale-1.3.0/deploy/funkwhale-server.service	2023-06-04 18:47:11.977097647 +0000
+@@ -8,7 +8,7 @@
+ User=funkwhale
+ # adapt this depending on the path of your funkwhale installation
+ WorkingDirectory=/srv/funkwhale/api
+-EnvironmentFile=/srv/funkwhale/config/.env
++EnvironmentFile=/etc/conf.d/funkwhale
+ 
+ Type=notify
+ KillMode=mixed
+diff -ur funkwhale-1.3.0.orig/deploy/funkwhale-worker.service funkwhale-1.3.0/deploy/funkwhale-worker.service
+--- funkwhale-1.3.0.orig/deploy/funkwhale-worker.service	2023-06-04 18:42:51.898016806 +0000
++++ funkwhale-1.3.0/deploy/funkwhale-worker.service	2023-06-04 18:48:00.986921983 +0000
+@@ -8,7 +8,7 @@
+ # adapt this depending on the path of your funkwhale installation
+ WorkingDirectory=/srv/funkwhale/api
+ Environment="CELERYD_CONCURRENCY=0"
+-EnvironmentFile=/srv/funkwhale/config/.env
++EnvironmentFile=/etc/conf.d/funkwhale
+ 
+ ExecStart=/srv/funkwhale/venv/bin/celery \
+     --app funkwhale_api.taskapp \
