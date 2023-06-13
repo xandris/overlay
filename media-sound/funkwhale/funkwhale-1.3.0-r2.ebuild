@@ -71,7 +71,7 @@ DEPEND="
 
 		system-python? (
 			=dev-python/django-auth-ldap-4*
-			=dev-python/python-ldap-5*
+			=dev-python/python-ldap-3*
 		)
 	)
 "
