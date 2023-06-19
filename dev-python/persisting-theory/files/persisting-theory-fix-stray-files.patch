@@ -1,0 +1,12 @@
+diff -ur persisting-theory-1.0.orig/setup.py persisting-theory-1.0/setup.py
+--- persisting-theory-1.0.orig/setup.py	2023-06-19 20:45:04.137992549 +0000
++++ persisting-theory-1.0/setup.py	2023-06-19 20:46:37.404783651 +0000
+@@ -10,7 +10,7 @@
+ setup(
+     name="persisting-theory",
+     version=package.__version__,
+-    packages=find_packages(),
++    packages=find_packages(exclude=["tests", "tests.*", "example", "example.*"]),
+     include_package_data=True,
+     license="BSD",  # example license
+     description="Registries that can autodiscover values accross your project apps",
