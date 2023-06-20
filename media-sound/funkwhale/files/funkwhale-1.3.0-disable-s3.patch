@@ -1,0 +1,196 @@
+diff -ur funkwhale-1.3.0.orig/api/config/settings/common.py funkwhale-1.3.0/api/config/settings/common.py
+--- funkwhale-1.3.0.orig/api/config/settings/common.py	2023-06-18 18:21:18.229753342 +0000
++++ funkwhale-1.3.0/api/config/settings/common.py	2023-06-18 18:25:25.515529592 +0000
+@@ -538,90 +538,6 @@
+ DEFAULT_FILE_STORAGE = "funkwhale_api.common.storage.ASCIIFileSystemStorage"
+ 
+ PROXY_MEDIA = env.bool("PROXY_MEDIA", default=True)
+-"""
+-Whether to proxy audio files through your reverse proxy.
+-We recommend you leave this enabled to enforce access control.
+-
+-If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH`
+-enabled, it's safe to disable this setting.
+-"""
+-AWS_DEFAULT_ACL = env("AWS_DEFAULT_ACL", default=None)
+-"""
+-The default ACL to use when uploading files to an S3-compatible object storage
+-bucket.
+-
+-ACLs and bucket policies are distinct concepts, and some storage
+-providers (ie Linode, Scaleway) will always apply the most restrictive between
+-a bucket's ACL and policy, meaning a default private ACL will supersede
+-a relaxed bucket policy.
+-
+-If present, the value should be a valid canned ACL.
+-See `<https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl>`_
+-"""
+-AWS_QUERYSTRING_AUTH = env.bool("AWS_QUERYSTRING_AUTH", default=not PROXY_MEDIA)
+-"""
+-Whether to include signatures in S3 URLs. Signatures
+-are used to enforce access control.
+-
+-Defaults to the opposite of :attr:`PROXY_MEDIA`.
+-"""
+-
+-AWS_S3_MAX_MEMORY_SIZE = env.int(
+-    "AWS_S3_MAX_MEMORY_SIZE", default=1000 * 1000 * 1000 * 20
+-)
+-
+-AWS_QUERYSTRING_EXPIRE = env.int("AWS_QUERYSTRING_EXPIRE", default=3600)
+-"""
+-The time in seconds before AWS signatures expire.
+-Only takes effect you enable :attr:`AWS_QUERYSTRING_AUTH`
+-"""
+-
+-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
+-"""
+-Access-key ID for your S3 storage.
+-"""
+-
+-if AWS_ACCESS_KEY_ID:
+-    AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID
+-    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+-    """
+-    Secret access key for your S3 storage.
+-    """
+-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+-    """
+-    Your S3 bucket name.
+-    """
+-    AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default=None)
+-    """
+-    Custom domain to use for your S3 storage.
+-    """
+-    AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default=None)
+-    """
+-    If you use a S3-compatible storage such as minio,
+-    set the following variable to the full URL to the storage server.
+-
+-    Examples:
+-
+-    - ``https://minio.mydomain.com``
+-    - ``https://s3.wasabisys.com``
+-    """
+-    AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default=None)
+-    """
+-    If you're using Amazon S3 to serve media without a proxy,
+-    you need to specify your region name to access files.
+-
+-    Example:
+-
+-    - ``eu-west-2``
+-    """
+-
+-    AWS_S3_SIGNATURE_VERSION = "s3v4"
+-    AWS_LOCATION = env("AWS_LOCATION", default="")
+-    """
+-    A directory in your S3 bucket where you store files.
+-    Use this if you plan to share the bucket between services.
+-    """
+-    DEFAULT_FILE_STORAGE = "funkwhale_api.common.storage.ASCIIS3Boto3Storage"
+ 
+ 
+ # See:
+diff -ur funkwhale-1.3.0.orig/api/config/settings/production.py funkwhale-1.3.0/api/config/settings/production.py
+--- funkwhale-1.3.0.orig/api/config/settings/production.py	2023-06-18 18:21:18.229753342 +0000
++++ funkwhale-1.3.0/api/config/settings/production.py	2023-06-18 18:28:58.012538742 +0000
+@@ -2,7 +2,6 @@
+ Production Configurations
+ 
+ - Use djangosecure
+-- Use Amazon's S3 for storing static files and uploaded media
+ - Use mailgun to send e-mails
+ - Use Redis on Heroku
+ 
+diff -ur funkwhale-1.3.0.orig/api/funkwhale_api/common/storage.py funkwhale-1.3.0/api/funkwhale_api/common/storage.py
+--- funkwhale-1.3.0.orig/api/funkwhale_api/common/storage.py	2023-06-18 18:21:18.239753150 +0000
++++ funkwhale-1.3.0/api/funkwhale_api/common/storage.py	2023-06-18 18:24:27.316438821 +0000
+@@ -3,7 +3,6 @@
+ 
+ import slugify
+ from django.core.files.storage import FileSystemStorage
+-from storages.backends.s3boto3 import S3Boto3Storage
+ 
+ 
+ def asciionly(name):
+@@ -26,8 +25,3 @@
+                 return super().delete(name)
+         except FileNotFoundError:
+             pass
+-
+-
+-class ASCIIS3Boto3Storage(S3Boto3Storage):
+-    def get_valid_name(self, name):
+-        return super().get_valid_name(asciionly(name))
+diff -ur funkwhale-1.3.0.orig/api/pyproject.toml funkwhale-1.3.0/api/pyproject.toml
+--- funkwhale-1.3.0.orig/api/pyproject.toml	2023-06-18 18:21:18.269752573 +0000
++++ funkwhale-1.3.0/api/pyproject.toml	2023-06-18 18:23:45.957113663 +0000
+@@ -40,7 +40,6 @@
+ django-filter = "==22.1"
+ django-oauth-toolkit = "2.2.0"
+ django-redis = "==5.2.0"
+-django-storages = "==1.13.2"
+ django-versatileimagefield = "==2.2"
+ djangorestframework = "==3.14.0"
+ drf-spectacular = "==0.25.1"
+@@ -69,7 +68,6 @@
+ aiohttp = "==3.8.3"
+ arrow = "==1.2.3"
+ bleach = "==5.0.1"
+-boto3 = "==1.26.54"
+ click = "==8.1.3"
+ cryptography = "==38.0.4"
+ feedparser = "==6.0.10"
+diff -ur funkwhale-1.3.0.orig/api/tests/common/test_storages.py funkwhale-1.3.0/api/tests/common/test_storages.py
+--- funkwhale-1.3.0.orig/api/tests/common/test_storages.py	2023-06-18 18:21:18.269752573 +0000
++++ funkwhale-1.3.0/api/tests/common/test_storages.py	2023-06-18 18:25:51.445138507 +0000
+@@ -15,7 +15,6 @@
+     "storage_class, parent_class",
+     [
+         (storage.ASCIIFileSystemStorage, storage.FileSystemStorage),
+-        (storage.ASCIIS3Boto3Storage, storage.S3Boto3Storage),
+     ],
+ )
+ def test_ascii_storage_call_asciionly(storage_class, parent_class, mocker):
+diff -ur funkwhale-1.3.0.orig/api/tests/music/test_utils.py funkwhale-1.3.0/api/tests/music/test_utils.py
+--- funkwhale-1.3.0.orig/api/tests/music/test_utils.py	2023-06-18 18:21:18.279752380 +0000
++++ funkwhale-1.3.0/api/tests/music/test_utils.py	2023-06-18 18:31:01.090989702 +0000
+@@ -41,15 +41,6 @@
+     assert result == expected
+ 
+ 
+-def test_guess_mimetype_dont_crash_with_s3(factories, mocker, settings):
+-    """See #857"""
+-    settings.DEFAULT_FILE_STORAGE = "funkwhale_api.common.storage.ASCIIS3Boto3Storage"
+-    mocker.patch("magic.from_buffer", return_value="none")
+-    f = factories["music.Upload"].build(audio_file__filename="test.mp3")
+-
+-    assert utils.guess_mimetype(f.audio_file) == "audio/mpeg"
+-
+-
+ def test_increment_downloads_count(factories, mocker, cache, anonymous_user, settings):
+     ident = {"type": "anonymous", "id": "noop"}
+     get_ident = mocker.patch(
+diff -ur funkwhale-1.3.0.orig/api/tests/music/test_views.py funkwhale-1.3.0/api/tests/music/test_views.py
+--- funkwhale-1.3.0.orig/api/tests/music/test_views.py	2023-06-18 18:21:18.279752380 +0000
++++ funkwhale-1.3.0/api/tests/music/test_views.py	2023-06-18 18:27:30.153719900 +0000
+@@ -255,18 +255,6 @@
+     assert response["X-Accel-Redirect"] == expected
+ 
+ 
+-def test_serve_s3_nginx_encode_url(mocker, settings):
+-    settings.PROTECT_FILE_PATH = "/_protected/media"
+-    settings.REVERSE_PROXY_TYPE = "nginx"
+-    audio_file = mocker.Mock(url="https://s3.storage.example/path/to/mp3?aws=signature")
+-
+-    expected = (
+-        b"/_protected/media/https://s3.storage.example/path/to/mp3%3Faws%3Dsignature"
+-    )
+-
+-    assert views.get_file_path(audio_file) == expected
+-
+-
+ @pytest.mark.parametrize(
+     "proxy,serve_path,expected",
+     [
