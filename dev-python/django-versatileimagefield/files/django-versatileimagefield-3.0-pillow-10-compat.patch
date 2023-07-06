@@ -1,0 +1,46 @@
+From 2a7ff349e02b2f9e95aaef2a0fd62bfdeacd8cc3 Mon Sep 17 00:00:00 2001
+From: Alexei <hello@alexei.ro>
+Date: Tue, 4 Jul 2023 12:32:23 +0100
+Subject: [PATCH] fix: use `Image.Resampling.LANCZOS` instead of
+ `Image.ANTIALIAS` when available
+
+---
+ docs/writing_custom_sizers_and_filters.rst |  4 ++--
+ versatileimagefield/versatileimagefield.py | 10 ++++++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/versatileimagefield/versatileimagefield.py b/versatileimagefield/versatileimagefield.py
+index 8d9ab50..7f75051 100644
+--- a/versatileimagefield/versatileimagefield.py
++++ b/versatileimagefield/versatileimagefield.py
+@@ -7,6 +7,12 @@
+ from .registry import versatileimagefield_registry
+ 
+ 
++try:
++    ANTIALIAS = Image.Resampling.LANCZOS
++except AttributeError:
++    ANTIALIAS = Image.ANTIALIAS  # deprecated in 9.1.0 and removed in 10.0.0
++
++
+ class CroppedImage(SizedImage):
+     """
+     A SizedImage subclass that creates a 'cropped' image.
+@@ -115,7 +121,7 @@ def crop_on_centerpoint(self, image, width, height, ppoi=(0.5, 0.5)):
+         # (as determined by `width`x`height`)
+         return cropped_image.resize(
+             (width, height),
+-            Image.ANTIALIAS
++            ANTIALIAS
+         )
+ 
+     def process_image(self, image, image_format, save_kwargs,
+@@ -168,7 +174,7 @@ def process_image(self, image, image_format, save_kwargs,
+         imagefile = BytesIO()
+         image.thumbnail(
+             (width, height),
+-            Image.ANTIALIAS
++            ANTIALIAS
+         )
+         image.save(
+             imagefile,
