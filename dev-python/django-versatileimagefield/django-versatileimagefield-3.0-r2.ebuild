@@ -4,21 +4,18 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{11,10} )
+PYTHON_COMPAT=( pypy3 python3_{12,11,10} )
 PYPI_NO_NORMALIZE=1
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="
-	A drop-in replacement for django's ImageField that provides a flexible, intuitive and easily-extensible
-	interface for creating new images from the one assigned to the field.
-"
+DESCRIPTION="Flexible, extensible drop-in replacement for django's ImageField."
 HOMEPAGE="
 	https://pypi.org/project/django-versatileimagefield/
 	https://github.com/respondcreate/django-versatileimagefield/
 "
 
-LICENSE=""
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 
