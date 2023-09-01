@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{11,10} )
+PYTHON_COMPAT=( pypy3 python3_{12,11,10} )
 PYPI_NO_NORMALIZE=1
 PYPI_VERSION=1.2.0
 
@@ -16,7 +16,7 @@ HOMEPAGE="
 	https://github.com/weixu365/pluralizer-py/
 "
 
-LICENSE=""
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 
