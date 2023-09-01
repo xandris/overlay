@@ -4,10 +4,10 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{11,10} )
+PYTHON_COMPAT=( pypy3 python3_{12,11,10} )
 PYPI_NO_NORMALIZE=1
 
-inherit distutils-r1 pypi optfeature
+inherit distutils-r1 pypi
 
 DESCRIPTION="Sane and flexible OpenAPI 3 schema generation for Django REST framework"
 HOMEPAGE="
@@ -15,7 +15,7 @@ HOMEPAGE="
 	https://github.com/tfranzel/drf-spectacular/
 "
 
-LICENSE=""
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 
@@ -28,14 +28,12 @@ RDEPEND="
 	dev-python/inflection
 	dev-python/typing-extensions
 "
-BDEPEND="test? (
-	dev-python/pytest-django
-	dev-python/mypy
-	dev-python/django-stubs
-	dev-python/djangorestframework-stubs
-	dev-python/types-pyyaml
-)"
+# BDEPEND="test? (
+# 	dev-python/pytest-django
+# 	dev-python/mypy
+# 	dev-python/django-stubs
+# 	dev-python/djangorestframework-stubs
+# 	dev-python/types-pyyaml
+# )"
 
 distutils_enable_tests pytest
-
-
