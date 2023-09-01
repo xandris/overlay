@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<!-- please remove python@ if tests do not work -->
+	<maintainer type="project">
+		<email>python@gentoo.org</email>
+	</maintainer>
+	<maintainer type="person">
+		<email>alex.iris.parker@gmail.com</email>
+		<name>Alexandra Parker</name>
+	</maintainer>
+	<stabilize-allarches/>
+	<upstream>
+		<remote-id type="github">agateblue/django-dynamic-preferences</remote-id>
+		<remote-id type="pypi">django-dynamic-preferences</remote-id>
+	</upstream>
+</pkgmetadata>

@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{11,10} )
+PYTHON_COMPAT=( pypy3 python3_{12,11,10} )
 PYPI_NO_NORMALIZE=1
 
 inherit distutils-r1 pypi
@@ -15,14 +15,14 @@ HOMEPAGE="
 	https://github.com/agateblue/django-dynamic-preferences/
 "
 
-LICENSE=""
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 
 RDEPEND="
 	>=dev-python/django-3.2
 	dev-python/six
-	=dev-python/persisting-theory-1.0
+	~dev-python/persisting-theory-1.0
 "
 BDEPEND=""
 
