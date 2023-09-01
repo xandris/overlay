@@ -11,22 +11,19 @@ PYTHON_COMPAT=( python3_{11,10,9} pypy3 )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_SETUPTOOLS=no
 
-inherit distutils-r1 systemd multiprocessing
+inherit distutils-r1 systemd multilib toolchain-funcs
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~arm ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="ldap s3"
-
 
 PATCHES=(
 	"${FILESDIR}/${PN}-server-path-notify.patch"
 	"${FILESDIR}/${PN}-systemd-tweaks.patch"
-	"${FILESDIR}/${P}-subsonic-various-artists-hack.patch"
+	"${FILESDIR}/${PN}-1.3.0-subsonic-various-artists-hack.patch"
 )
 
-# Compile-time only dependencies
-# Including libraries needed to 'pip install' but optional at runtime.
 RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/aiohttp[${PYTHON_USEDEP}]
@@ -44,6 +41,7 @@ RDEPEND="
 		dev-python/django-cache-memoize[${PYTHON_USEDEP}]
 		dev-python/django-cacheops[${PYTHON_USEDEP}]
 		dev-python/django-cleanup[${PYTHON_USEDEP}]
+		dev-python/django-cors-headers[${PYTHON_USEDEP}]
 		dev-python/django-dynamic-preferences[${PYTHON_USEDEP}]
 		dev-python/django-environ[${PYTHON_USEDEP}]
 		dev-python/django-filter[${PYTHON_USEDEP}]
@@ -72,6 +70,7 @@ RDEPEND="
 		dev-python/unicode-slugify[${PYTHON_USEDEP}]
 		dev-python/uvicorn[${PYTHON_USEDEP}]
 		dev-python/watchdog[${PYTHON_USEDEP}]
+		dev-python/websockets[${PYTHON_USEDEP}]
 		media-libs/mutagen[${PYTHON_USEDEP}]
 		www-servers/gunicorn[${PYTHON_USEDEP}]
 
@@ -107,11 +106,11 @@ BDEPEND="
 
 src_prepare() {
 	if ! use ldap; then
-		eapply "${FILESDIR}/${P}-disable-ldap.patch"
+		eapply "${FILESDIR}/${PN}-1.3.0-disable-ldap.patch"
 	fi
 
 	if ! use s3; then
-		eapply "${FILESDIR}/${P}-disable-s3.patch"
+		eapply "${FILESDIR}/${PN}-1.3.1-disable-s3.patch"
 	fi
 
 	sed -Ei "/^ExecStart=/ s!=.*!="$PYTHON" -m celery \\\\!" deploy/funkwhale-beat.service
@@ -132,7 +131,6 @@ get-pypy-libdir() {
 	return 1
 }
 
-
 src_configure() {
 	pushd front || die
 	tc-env_build yarn --ignore-engines || die "Failed to install yarn packages"
@@ -142,10 +140,12 @@ src_configure() {
 
 src_compile() {
 	local -x NODE_ENV=production
+	local -x NODE_OPTIONS='--max-old-space-size=4096'
+	local log="${T}/yarn-build-log.txt"
 	pushd front || die
 	tc-env_build yarn run fix-fomantic-css
-	tc-env_build yarn run build:deployment | tee /dev/stderr | (! grep -i 'ERROR in' ) || \
-		die "Failed to build frontend"
+	tc-env_build yarn run build:deployment > "${log}" || die "Failed to build frontend"
+	grep -q 'ERROR in' "${log}" && die "Failed to build frontend"
 	popd || die
 }
 

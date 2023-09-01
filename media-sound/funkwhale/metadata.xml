@@ -6,6 +6,7 @@
 		<name>Alexandra Parker</name>
 	</maintainer>
 	<use>
+		<flag name="s3">Store audio in in a remote S3 store.</flag>
 		<flag name="system-python">Use system Python packages where possible.</flag>
 	</use>
 </pkgmetadata>
