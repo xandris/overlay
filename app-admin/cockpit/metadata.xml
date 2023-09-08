@@ -8,4 +8,7 @@
 		<flag name="polkit">Enable bridge with <pkg>sys-auth/polkit</pkg></flag>
 		<flag name="ssh">Build cockpit-ssh for remote access, requires <pkg>net-libs/libssh</pkg></flag>
 	</use>
+	<upstream>
+		<remote-id type="github">cockpit-project/cockpit</remote-id>
+	</upstream>
 </pkgmetadata>

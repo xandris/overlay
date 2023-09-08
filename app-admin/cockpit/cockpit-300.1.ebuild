@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{9..11} )
-inherit autotools python-any-r1
+PYTHON_COMPAT=( python3_{9..12} )
+inherit python-r1
 
 DESCRIPTION="Cockpit is a web-based graphical interface for servers."
 HOMEPAGE="https://cockpit-project.org/"
