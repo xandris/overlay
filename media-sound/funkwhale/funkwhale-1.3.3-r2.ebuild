@@ -22,6 +22,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-server-path-notify.patch"
 	"${FILESDIR}/${PN}-systemd-tweaks.patch"
 	"${FILESDIR}/${PN}-1.3.0-subsonic-various-artists-hack.patch"
+	"${FILESDIR}/${PN}-1.3.3-django-allauth-1.56.patch"
 )
 
 RDEPEND="
@@ -37,7 +38,7 @@ RDEPEND="
 		dev-python/daphne[${PYTHON_USEDEP}]
 		dev-python/dj-rest-auth[${PYTHON_USEDEP}]
 		=dev-python/django-3*[${PYTHON_USEDEP}]
-		dev-python/django-allauth[${PYTHON_USEDEP}]
+		>=dev-python/django-allauth-1.56[${PYTHON_USEDEP}]
 		dev-python/django-cache-memoize[${PYTHON_USEDEP}]
 		dev-python/django-cacheops[${PYTHON_USEDEP}]
 		dev-python/django-cleanup[${PYTHON_USEDEP}]
