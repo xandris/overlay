@@ -60,7 +60,7 @@ RDEPEND="
 		dev-python/pydub[${PYTHON_USEDEP}]
 		dev-python/pyld[${PYTHON_USEDEP}]
 		dev-python/python-magic[${PYTHON_USEDEP}]
-		dev-python/python-musicbrainzngs[${PYTHON_USEDEP}]
+		dev-python/musicbrainzngs[${PYTHON_USEDEP}]
 		dev-python/pytz[${PYTHON_USEDEP}]
 		dev-python/redis[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
