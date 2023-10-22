@@ -22,7 +22,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 RDEPEND="
 	dev-python/django
 	dev-python/djangorestframework
-	<dev-python/django-allauth-0.55
+	dev-python/django-allauth
 "
 BDEPEND="
 	test? (
