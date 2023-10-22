@@ -38,7 +38,7 @@ RDEPEND="
 		dev-python/daphne[${PYTHON_USEDEP}]
 		dev-python/dj-rest-auth[${PYTHON_USEDEP}]
 		=dev-python/django-3*[${PYTHON_USEDEP}]
-		>=dev-python/django-allauth-1.56[${PYTHON_USEDEP}]
+		>=dev-python/django-allauth-0.56[${PYTHON_USEDEP}]
 		dev-python/django-cache-memoize[${PYTHON_USEDEP}]
 		dev-python/django-cacheops[${PYTHON_USEDEP}]
 		dev-python/django-cleanup[${PYTHON_USEDEP}]
