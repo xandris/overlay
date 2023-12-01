@@ -1,0 +1,6 @@
+# media-sound/funkwhale
+# => dev-python/pyld
+# => dev-python/frozendict
+#
+# only accelerates up to python 3.10 right now, but still works in 3.11
+dev-python/frozendict
