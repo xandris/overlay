@@ -31,7 +31,7 @@ RDEPEND="
 	>=dev-python/python-dateutil-2.8.2
 	>=dev-python/regex-2023.6.3
 	>=dev-python/requests-2.31.0
-	>=sci-libs/scikit-learn-1.2.1
+	>=dev-python/scikit-learn-1.2.1
 	>=dev-python/spotipy-2.22.1
 	dev-python/tqdm
 	>=dev-python/ujson-4.5.0
