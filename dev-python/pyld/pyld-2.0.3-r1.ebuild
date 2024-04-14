@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~arm64"
+KEYWORDS="~arm64 ~amd64"
 
 RDEPEND="
 	dev-python/cachetools
