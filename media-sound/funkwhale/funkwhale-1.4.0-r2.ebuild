@@ -47,7 +47,7 @@ RDEPEND="
 		dev-python/django-dynamic-preferences[${PYTHON_USEDEP}]
 		dev-python/django-environ[${PYTHON_USEDEP}]
 		dev-python/django-filter[${PYTHON_USEDEP}]
-		<dev-python/django-oauth-toolkit-2.3.0[${PYTHON_USEDEP}]
+		dev-python/django-oauth-toolkit[${PYTHON_USEDEP}]
 		dev-python/django-redis[${PYTHON_USEDEP}]
 		dev-python/django-versatileimagefield[${PYTHON_USEDEP}]
 		dev-python/djangorestframework[${PYTHON_USEDEP}]

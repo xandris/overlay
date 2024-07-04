@@ -9,21 +9,20 @@ PYPI_NO_NORMALIZE=1
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="OAuth2 Provider for Django"
+DESCRIPTION="Flexible, extensible drop-in replacement for django's ImageField."
 HOMEPAGE="
-	https://pypi.org/project/django-oauth-toolkit/
-	https://github.com/jazzband/django-oauth-toolkit/
+	https://pypi.org/project/django-versatileimagefield/
+	https://github.com/respondcreate/django-versatileimagefield/
 "
 
-LICENSE="BSD"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 
 RDEPEND="
 	dev-python/django
-	dev-python/requests
-	dev-python/oauthlib
-	dev-python/jwcrypto
+	dev-python/pillow
+	dev-python/python-magic
 "
 BDEPEND=""
 
