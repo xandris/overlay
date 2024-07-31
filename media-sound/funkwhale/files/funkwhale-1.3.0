@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-
-PATH="/srv/funkwhale/virtualenv/bin:$PATH"
-set -a
-source /etc/conf.d/funkwhale
-set +a
-exec /srv/funkwhale/venv/bin/funkwhale-manage "$@"

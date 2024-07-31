@@ -1,0 +1,103 @@
+diff '--color=auto' -ur funkwhale-1.4.0.orig/api/funkwhale_api/subsonic/views.py funkwhale-1.4.0/api/funkwhale_api/subsonic/views.py
+--- funkwhale-1.4.0.orig/api/funkwhale_api/subsonic/views.py	2024-07-30 22:41:01.798906854 +0000
++++ funkwhale-1.4.0/api/funkwhale_api/subsonic/views.py	2024-07-31 01:06:44.337422514 +0000
+@@ -9,6 +9,7 @@
+ from django.db import transaction
+ from django.db.models import Count, Prefetch, Q
+ from django.utils import timezone
++from django.core.exceptions import ObjectDoesNotExist
+ from rest_framework import exceptions
+ from rest_framework import permissions as rest_permissions
+ from rest_framework import renderers, response, viewsets
+@@ -456,7 +457,7 @@
+         elif type == "random":
+             queryset = queryset.order_by("?")
+         elif type == "alphabeticalByName" or not type:
+-            queryset = queryset.order_by("artist__title")
++            queryset = queryset.order_by("title")
+         elif type == "recent" or not type:
+             queryset = queryset.exclude(release_date=None).order_by("-release_date")
+         elif type == "newest" or not type:
+@@ -773,41 +774,31 @@
+                 {"error": {"code": 10, "message": "cover art ID must be specified."}}
+             )
+ 
+-        if id.startswith("al-"):
+-            try:
++        try:
++            if id.startswith("al-"):
+                 album_id = int(id.replace("al-", ""))
+                 album = (
+                     music_models.Album.objects.exclude(attachment_cover=None)
+                     .select_related("attachment_cover")
+                     .get(pk=album_id)
+                 )
+-            except (TypeError, ValueError, music_models.Album.DoesNotExist):
+-                return response.Response(
+-                    {"error": {"code": 70, "message": "cover art not found."}}
+-                )
+-            attachment = album.attachment_cover
+-        elif id.startswith("ar-"):
+-            try:
++                attachment = album.attachment_cover
++            elif id.startswith("ar-"):
+                 artist_id = int(id.replace("ar-", ""))
+                 artist = (
+                     music_models.Artist.objects.exclude(attachment_cover=None)
+                     .select_related("attachment_cover")
+                     .get(pk=artist_id)
+                 )
+-            except (TypeError, ValueError, music_models.Album.DoesNotExist):
+-                return response.Response(
+-                    {"error": {"code": 70, "message": "cover art not found."}}
+-                )
+-            attachment = artist.attachment_cover
+-        elif id.startswith("at-"):
+-            try:
++                attachment = artist.attachment_cover
++            elif id.startswith("at-"):
+                 attachment_id = id.replace("at-", "")
+                 attachment = common_models.Attachment.objects.get(uuid=attachment_id)
+-            except (TypeError, ValueError, music_models.Album.DoesNotExist):
++            else:
+                 return response.Response(
+                     {"error": {"code": 70, "message": "cover art not found."}}
+                 )
+-        else:
++        except (TypeError, ValueError, ObjectDoesNotExist):
+             return response.Response(
+                 {"error": {"code": 70, "message": "cover art not found."}}
+             )
+@@ -1016,3 +1007,32 @@
+             }
+         }
+         return response.Response(data)
++
++    @action(
++        detail=False,
++        methods=["get", "post"],
++        url_name="get_lyrics",
++        url_path="getLyrics",
++    )
++    def get_lyrics(self, *args, **kwargs):
++        return response.Response(
++            {"error": {"code": 70, "message": "lyrics not found."}}
++        )
++
++    @action(
++        detail=False,
++        methods=["get", "post"],
++        url_name="get_internet_radio_stations",
++        url_path="getInternetRadioStations",
++    )
++    def get_internet_radio_stations(self, *args, **kwargs):
++        return response.Response({"internetRadioStations": []})
++
++    @action(
++        detail=False,
++        methods=["get", "post"],
++        url_name="get_open_subsonic_extensions",
++        url_path="getOpenSubsonicExtensions",
++    )
++    def get_open_subsonic_extensions(self, *args, **kwargs):
++        return response.Response({"openSubsonicExtensions": []})

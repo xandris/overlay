@@ -24,6 +24,9 @@ PATCHES=(
 	"${FILESDIR}/${PN}-1.3.0-subsonic-various-artists-hack.patch"
 	"${FILESDIR}/${PN}-1.3.3-django-allauth-1.56.patch"
 	"${FILESDIR}/${P}-django-4.patch"
+	"${FILESDIR}/${P}-subsonic-errors.patch"
+	"${FILESDIR}/${P}-listenbrainz-unclosed-socket.patch"
+	"${FILESDIR}/${P}-deprecations.patch"
 )
 
 RDEPEND="
