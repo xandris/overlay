@@ -117,7 +117,7 @@ BDEPEND="
 src_prepare() {
 	printf '\ninstall:\n' >> Makefile # new Makefile in 1.4.0; lacks an 'install' target
 	if ! use ldap; then
-		eapply "${FILESDIR}/${PN}-1.3.0-disable-ldap.patch"
+		eapply "${FILESDIR}/${PN}-1.3.1-disable-ldap.patch"
 	fi
 
 	if ! use s3; then
