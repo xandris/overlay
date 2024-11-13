@@ -72,7 +72,6 @@ RDEPEND="
 		dev-python/redis[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/requests-http-message-signatures[${PYTHON_USEDEP}]
-		dev-python/sentry-sdk[${PYTHON_USEDEP}]
 		dev-python/service-identity[${PYTHON_USEDEP}]
 		dev-python/troi[${PYTHON_USEDEP}]
 		dev-python/lb-matching-tools[${PYTHON_USEDEP}]
@@ -111,7 +110,7 @@ BDEPEND="
 	sys-apps/yarn
 	dev-build/make
 
-	virtual/rust
+	dev-lang/rust
 "
 
 src_prepare() {
