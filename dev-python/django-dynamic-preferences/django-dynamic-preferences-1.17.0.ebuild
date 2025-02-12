@@ -6,20 +6,25 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3 python3_{12,11,10} )
 PYPI_NO_NORMALIZE=1
+PYPI_PN="${PN//-/_}"
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="Django utility for a memoization decorator that uses the Django cache framework."
+DESCRIPTION="Dynamic global and instance settings for your django project"
 HOMEPAGE="
-	https://pypi.org/project/django-cache-memoize/
-	https://github.com/peterbe/django-cache-memoize/
+	https://pypi.org/project/django-dynamic-preferences/
+	https://github.com/agateblue/django-dynamic-preferences/
 "
 
-LICENSE="MIT MPL-2.0"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~riscv ~sparc ~x86"
 
-RDEPEND=""
+RDEPEND="
+	>=dev-python/django-3.2
+	dev-python/six
+	~dev-python/persisting-theory-1.0
+"
 BDEPEND=""
 
 distutils_enable_tests pytest
