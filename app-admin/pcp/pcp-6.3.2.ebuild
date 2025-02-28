@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{11..13} )
 inherit autotools python-any-r1
 
 DESCRIPTION="Performance Co-Pilot is a system performance analysis toolkit."
@@ -83,7 +83,6 @@ PATCHES=(
 src_prepare() {
 	default
 	eautoreconf
-	sed -Ei '/HAVE_64|PM_SIZEOF/ d' src/include/pcp/config.h.in
 }
 
 src_configure() {
