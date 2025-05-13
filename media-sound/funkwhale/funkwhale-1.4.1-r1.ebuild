@@ -7,7 +7,7 @@ DESCRIPTION="Federated audio server."
 HOMEPAGE="https://funkwhale.audio/"
 SRC_URI="https://dev.funkwhale.audio/${PN}/${PN}/-/archive/${PV}/${P}.tar.bz2"
 RESTRICT="mirror"
-PYTHON_COMPAT=( python3_{12,11} pypy3 )
+PYTHON_COMPAT=( python3_{13,12} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_SETUPTOOLS=no
 
@@ -23,10 +23,10 @@ PATCHES=(
 	"${FILESDIR}/${PN}-systemd-tweaks.patch"
 	"${FILESDIR}/${PN}-1.3.0-subsonic-various-artists-hack.patch"
 	"${FILESDIR}/${PN}-1.3.3-django-allauth-1.56.patch"
-	"${FILESDIR}/${P}-django-4.patch"
-	"${FILESDIR}/${P}-subsonic-errors.patch"
-	"${FILESDIR}/${P}-listenbrainz-unclosed-socket.patch"
-	"${FILESDIR}/${P}-deprecations.patch"
+	"${FILESDIR}/${PN}-1.4.1-django-4.patch"
+	"${FILESDIR}/${PN}-1.4.0-subsonic-errors.patch"
+	"${FILESDIR}/${PN}-1.4.0-listenbrainz-unclosed-socket.patch"
+	"${FILESDIR}/${PN}-1.4.0-deprecations.patch"
 )
 
 RDEPEND="
@@ -73,8 +73,6 @@ RDEPEND="
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/requests-http-message-signatures[${PYTHON_USEDEP}]
 		dev-python/service-identity[${PYTHON_USEDEP}]
-		dev-python/troi[${PYTHON_USEDEP}]
-		dev-python/lb-matching-tools[${PYTHON_USEDEP}]
 		dev-python/unicode-slugify[${PYTHON_USEDEP}]
 		dev-python/unidecode[${PYTHON_USEDEP}]
 		dev-python/uvicorn[${PYTHON_USEDEP}]
