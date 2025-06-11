@@ -8,10 +8,8 @@ HOMEPAGE="https://funkwhale.audio/"
 SRC_URI="https://dev.funkwhale.audio/${PN}/${PN}/-/archive/${PV}/${P}.tar.bz2"
 RESTRICT="mirror"
 PYTHON_COMPAT=( python3_{13,12} )
-DISTUTILS_SINGLE_IMPL=1
-DISTUTILS_USE_SETUPTOOLS=no
 
-inherit distutils-r1 systemd multilib toolchain-funcs
+inherit python-single-r1 systemd multilib toolchain-funcs
 
 LICENSE="AGPL-3"
 SLOT="0"
