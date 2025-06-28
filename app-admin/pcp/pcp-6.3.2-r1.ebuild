@@ -78,6 +78,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-fix-ar-check.patch"
 	"${FILESDIR}/${PN}-missing-sys-types-h-check.patch"
 	"${FILESDIR}/${PN}-missing-sys-stat-include.patch"
+	"${FILESDIR}/${P}-gcc-incompatible-pointer-types.patch"
 )
 
 src_prepare() {
