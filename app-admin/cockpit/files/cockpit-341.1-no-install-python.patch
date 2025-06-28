@@ -1,0 +1,12 @@
+diff '--color=auto' -ur cockpit-341.orig/src/Makefile.am cockpit-341/src/Makefile.am
+--- cockpit-341.orig/src/Makefile.am	2025-06-25 11:40:57.000000000 +0000
++++ cockpit-341/src/Makefile.am	2025-06-26 23:59:25.850970827 +0000
+@@ -21,7 +21,7 @@
+ 	$(MAKE) test-server
+ 	cd '$(srcdir)' && abs_builddir='$(abs_builddir)' pytest --cov
+ 
+-INSTALL_DATA_LOCAL_TARGETS += install-python
++# INSTALL_DATA_LOCAL_TARGETS += install-python
+ install-python:
+ 	@# wheel-based installation with .dist-info.
+ 	@# This needs to work on RHEL8 up through modern Fedora, offline, with

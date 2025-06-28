@@ -1,9 +1,10 @@
 # Copyright 2021-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-PYTHON_COMPAT=( python3_{9..12} )
-inherit python-r1
+EAPI=8
+PYTHON_COMPAT=( python3_{10..14} )
+DISTUTILS_USE_PEP517=standalone
+inherit distutils-r1 autotools
 
 DESCRIPTION="Cockpit is a web-based graphical interface for servers."
 HOMEPAGE="https://cockpit-project.org/"
@@ -70,6 +71,13 @@ BDEPEND="
 # But I don't have that directory so shrug?
 #net-libs/nodejs
 
+src_prepare() {
+	default
+	eapply "${FILESDIR}/${P}-no-install-python.patch"
+	eautoreconf
+	distutils-r1_src_prepare
+}
+
 src_configure() {
 	local myconf="
 		$(use_enable asan)
@@ -85,6 +93,7 @@ src_configure() {
 		--with-admin-group=wheel
 	"
 	econf $myconf
+	distutils-r1_src_prepare
 }
 
 src_install() {
@@ -93,4 +102,5 @@ src_install() {
 		install -d -m 755 "${ED}/etc/pam.d"
 		cp "${FILESDIR}/cockpit.pam" "${ED}/etc/pam.d/cockpit"
 	fi
+	distutils-r1_src_install
 }
