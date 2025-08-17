@@ -36,7 +36,7 @@ RDEPEND="
 		dev-python/click[${PYTHON_USEDEP}]
 		dev-python/cryptography[${PYTHON_USEDEP}]
 		dev-python/channels[${PYTHON_USEDEP}]
-		dev-python/channels-redis[${PYTHON_USEDEP}]
+		=dev-python/channels-redis-4.2*[${PYTHON_USEDEP}]
 		dev-python/daphne[${PYTHON_USEDEP}]
 		dev-python/dj-rest-auth[${PYTHON_USEDEP}]
 		=dev-python/django-4*[${PYTHON_USEDEP}]
