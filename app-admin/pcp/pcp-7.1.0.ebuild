@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 inherit autotools python-any-r1
 
 DESCRIPTION="Performance Co-Pilot is a system performance analysis toolkit."
@@ -78,7 +78,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-fix-ar-check.patch"
 	"${FILESDIR}/${PN}-missing-sys-types-h-check.patch"
 	"${FILESDIR}/${PN}-missing-sys-stat-include.patch"
-	"${FILESDIR}/${P}-gcc-incompatible-pointer-types.patch"
 )
 
 src_prepare() {
