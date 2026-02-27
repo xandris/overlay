@@ -73,7 +73,7 @@ BDEPEND="
 
 src_prepare() {
 	default
-	eapply "${FILESDIR}/${P}-no-install-python.patch"
+	eapply "${FILESDIR}/${PN}-341.1-no-install-python.patch"
 	eautoreconf
 	distutils-r1_src_prepare
 }
