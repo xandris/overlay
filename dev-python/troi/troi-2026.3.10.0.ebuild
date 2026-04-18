@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="ListenBrainz' empathic music recommendation/playlisting engine"
 HOMEPAGE="
-	https://pypi.org/project/troi/
+	https://pypi.org/project/troi-recommendation-playground/
 "
 RESTRICT="mirror"
 
