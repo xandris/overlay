@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{13,12} )
+PYTHON_COMPAT=( pypy3 python3_12 python3_11 )
 
 inherit distutils-r1 pypi
 
@@ -13,7 +13,7 @@ HOMEPAGE="https://pypi.org/project/countryinfo/"
 RESTRICT="mirror"
 commit="e90277480434ee194fd71c3f324ea09ee0e6570d"
 SRC_URI="
-	https://github.com/porimol/countryinfo//archive/${commit}.tar.gz -> ${P}.tar.gz
+	https://github.com/porimol/countryinfo//archive/${14,13}.tar.gz -> ${P}.tar.gz
 "
 S="${WORKDIR}/countryinfo-${commit}"
 
