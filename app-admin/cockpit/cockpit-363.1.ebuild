@@ -15,13 +15,10 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-IUSE="asan debug doc go pam pcp polkit ssh"
+IUSE="asan debug doc go pam"
 DEPEND="
 	acct-user/${PN}
 	acct-group/${PN}
-	pcp? ( app-admin/pcp )
-	polkit? ( sys-auth/polkit )
-	ssh? ( >=net-libs/libssh-0.8.5[server] )
 	app-arch/lz4
 	app-arch/zstd
 	>=app-crypt/mit-krb5-1.11
@@ -83,17 +80,9 @@ src_configure() {
 		$(use_enable asan)
 		$(use_enable debug)
 		$(use_enable doc)
-		$(use_enable pcp)
-		$(use_enable polkit)
-		$(use_enable ssh)
-		--with-cockpit-user=cockpit
-		--with-cockpit-group=cockpit
-		--with-cockpit-ws-instance-user=cockpit
-		--with-cockpit-ws-instance-group=cockpit
 		--with-admin-group=wheel
 	"
 	econf $myconf
-	distutils-r1_src_prepare
 }
 
 src_install() {
