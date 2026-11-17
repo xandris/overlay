@@ -34,3 +34,39 @@ diff -ur funkwhale-1.3.0.orig/deploy/funkwhale-worker.service funkwhale-1.3.0/de
  
  ExecStart=/srv/funkwhale/venv/bin/celery \
      --app funkwhale_api.taskapp \
+diff '--color=auto' -ur funkwhale-2.0.0_rc22.orig/deploy/funkwhale-server.service funkwhale-2.0.0_rc22/deploy/funkwhale-server.service
+--- funkwhale-2.0.0_rc22.orig/deploy/funkwhale-server.service	2026-03-15 00:08:30.345928364 +0000
++++ funkwhale-2.0.0_rc22/deploy/funkwhale-server.service	2026-03-15 00:17:25.413917928 +0000
+@@ -7,7 +7,7 @@
+ Type=notify
+ User=funkwhale
+ # adapt this depending on the path of your funkwhale installation
+-WorkingDirectory=/srv/funkwhale/api
++WorkingDirectory=/srv/funkwhale
+ EnvironmentFile=/etc/conf.d/funkwhale
+ 
+ Type=notify
+diff '--color=auto' -ur funkwhale-2.0.0_rc22.orig/deploy/funkwhale-beat.service funkwhale-2.0.0_rc22/deploy/funkwhale-beat.service
+--- funkwhale-2.0.0_rc22.orig/deploy/funkwhale-beat.service	2026-03-15 00:18:37.012955854 +0000
++++ funkwhale-2.0.0_rc22/deploy/funkwhale-beat.service	2026-03-15 00:22:06.067255761 +0000
+@@ -6,7 +6,7 @@
+ [Service]
+ User=funkwhale
+ # adapt this depending on the path of your funkwhale installation
+-WorkingDirectory=/srv/funkwhale/api
++WorkingDirectory=/srv/funkwhale
+ EnvironmentFile=/etc/conf.d/funkwhale
+ 
+ ExecStart=/usr/bin/python3.13 -m celery \
+diff '--color=auto' -ur funkwhale-2.0.0_rc22.orig/deploy/funkwhale-worker.service funkwhale-2.0.0_rc22/deploy/funkwhale-worker.service
+--- funkwhale-2.0.0_rc22.orig/deploy/funkwhale-worker.service	2026-03-15 00:18:37.013774684 +0000
++++ funkwhale-2.0.0_rc22/deploy/funkwhale-worker.service	2026-03-15 00:22:12.329871091 +0000
+@@ -6,7 +6,7 @@
+ [Service]
+ User=funkwhale
+ # adapt this depending on the path of your funkwhale installation
+-WorkingDirectory=/srv/funkwhale/api
++WorkingDirectory=/srv/funkwhale
+ Environment="CELERYD_CONCURRENCY=0"
+ EnvironmentFile=/etc/conf.d/funkwhale
+ 

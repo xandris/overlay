@@ -1,0 +1,32 @@
+# Hostname of your Funkwhale pod, e.g mypod.audio
+# FUNKWHALE_HOSTNAME=localhost
+
+
+# Protocol end users will use to access your pod, either http or https.
+# FUNKWHALE_PROTOCOL=http
+# FUNKWHALE_PROTOCOL=https
+
+
+# URL to connect to the PostgreSQL database.
+#
+# DATABASE_URL=postgresql://funkwhale@:5432/funkwhale
+#
+# DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<database>
+#
+# DATABASE_URL=postgresql://funkwhale:passw0rd@localhost:5432/funkwhale_database
+
+
+# Max time, in seconds, before database connections are closed.
+DB_CONN_MAX_AGE = 300
+
+
+# URL to your redis server. Examples:
+#
+# CACHE_URL=redis://<host>:<port>/<database>
+#
+# CACHE_URL=redis://127.0.0.1:6379/0
+#
+# CACHE_URL=redis://:password@localhost:6379/0 for password auth (the extra semicolon is important)
+#
+# CACHE_URL=redis:///run/redis/redis.sock?db=0 over unix sockets
+CACHE_URL=redis://127.0.0.1:6379/0
